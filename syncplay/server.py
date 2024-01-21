@@ -573,6 +573,7 @@ class Room(object):
         self._playlist = []
         self._playlistIndex = None
         self._lastUpdate = time.time()
+        self._lastSetUpdate = time.time()
         self._lastSavedUpdate = 0
         self._position = 0
         self._permanent = False
@@ -685,6 +686,11 @@ class Room(object):
         self.writeToDb()
 
     def setPlaylistIndex(self, index, setBy=None):
+        if time.time() - self._lastSetUpdate < 2:
+            return
+
+        self._lastSetUpdate = time.time()
+
         self._playlistIndex = index
         self.writeToDb()
 
